@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 107 Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f0f8ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .card p {
+            margin: 10px 0;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .textbox {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .score {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Part 107 Flashcards</h1>
+        <div class="card" id="flashcard">
+            <p id="question">Click "Next" to start studying!</p>
+            <p id="answer" style="display:none;">Answer will appear here.</p>
+        </div>
+        <input type="text" class="textbox" id="userAnswer" placeholder="Type your answer here...">
+        <div>
+            <button class="button" onclick="markCorrect()">Correct</button>
+            <button class="button" onclick="markIncorrect()">Incorrect</button>
+        </div>
+        <div class="score" id="score">Score: 0/0</div>
+        <div>
+            <button class="button" onclick="showAnswer()">Show Answer</button>
+            <button class="button" onclick="nextCard()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+    { question: "What is the minimum age to obtain a Remote Pilot Certificate?", answer: "16" },
+    { question: "What must a remote pilot do before flying in controlled airspace?", answer: "Receive ATC authorization." },
+    { question: "When is a small UA required to have anti-collision lights?", answer: "During night operations." },
+    { question: "What is the weight limit for small UAS operations under Part 107?", answer: "55 pounds." },
+    { question: "What is the required distance from clouds for UA operations?", answer: "500 feet below and 2,000 feet horizontally." },
+    { question: "Who is responsible for ensuring the small UA is in safe condition before flight?", answer: "The Remote PIC." },
+    { question: "What should you do if your small UA causes damage exceeding $500?", answer: "Report to the FAA within 10 days." },
+    { question: "What is the maximum groundspeed for UA operations?", answer: "87 knots (100 mph)." },
+    { question: "What is required to operate multiple UAS simultaneously?", answer: "A Certificate of Waiver." },
+    { question: "When can a Remote PIC deviate from Part 107 rules?", answer: "To avoid an emergency." },
+    { question: "What is the minimum visibility required for UA operations?", answer: "3 statute miles." },
+    { question: "What must a remote pilot do if an aircraft is in distress?", answer: "Yield the right of way to the manned aircraft." },
+    { question: "What is the responsibility of the visual observer during operations?", answer: "Assist the Remote PIC and ensure the UA remains within visual line of sight." },
+    { question: "What are the three categories for operations over people?", answer: "Category 1, Category 2, and Category 3 operations." },
+    { question: "What is required for night operations under Part 107?", answer: "Completion of night training and anti-collision lights visible for at least 3 statute miles." },
+    { question: "What is the altitude limit for operating a small UA?", answer: "400 feet AGL, or within 400 feet of a structure." },
+    { question: "Who is responsible for ensuring compliance with all operational requirements of Part 107?", answer: "The Remote Pilot in Command (Remote PIC)." },
+    { question: "What must be reported to the FAA within 10 days?", answer: "Accidents resulting in serious injury or property damage over $500." },
+    { question: "What does the FAA require for operations in Class B, C, or D airspace?", answer: "Authorization from Air Traffic Control (ATC)." },
+    { question: "What is prohibited under § 107.25?", answer: "Operating from a moving vehicle unless in sparsely populated areas." },
+    { question: "What conditions must be met for Category 1 operations over people?", answer: "The UA must weigh 0.55 pounds or less and not have rotating parts that could lacerate skin." },
+    { question: "What is the purpose of a Certificate of Waiver?", answer: "To allow deviation from certain Part 107 rules if safety can still be maintained." },
+    { question: "What must a Remote PIC do before each flight?", answer: "Conduct a preflight inspection to ensure the UA is in a condition for safe operation." },
+    { question: "What happens if a Remote Pilot Certificate holder changes their permanent address?", answer: "They must notify the FAA within 30 days." },
+    { question: "What must be carried by the Remote PIC during operations?", answer: "Their Remote Pilot Certificate and identification." },
+    { question: "What is the restriction on alcohol use for Remote PICs?", answer: "No operation within 8 hours of alcohol consumption or while under its influence." },
+    { question: "What is the maximum time a temporary Remote Pilot Certificate is valid?", answer: "120 calendar days." },
+    { question: "What should the Remote PIC do in the event of a lost communication link with the UA?", answer: "Follow preplanned lost link procedures to ensure safety." },
+    { question: "What is the load factor impact during turns?", answer: "Load factor increases with bank angle during turns." },
+    { question: "What is the minimum passing grade for the Part 107 knowledge test?", answer: "70%." },
+    { question: "What is required before operating a small UA in restricted airspace?", answer: "Obtain permission from the controlling agency." },
+    { question: "What must the Remote PIC do if there is a change in the operating environment?", answer: "Reassess the risk and adjust the flight plan as needed." },
+    { question: "When operating near an airport, who has the right of way?", answer: "Man-made aircraft, not UAS." },
+    { question: "What should a Remote PIC consider in high winds?", answer: "The aircraft's ability to maintain control, and the safety of people and property on the ground." },
+    { question: "What is the required weather information for a safe operation?", answer: "The Remote PIC must have a weather briefing that includes visibility, wind, and any hazards in the area." },
+    { question: "How must a small UAS be marked for registration?", answer: "It must display the unique registration number on an external surface, visible without disassembly." },
+    { question: "What must be done if the UAS is damaged or malfunctioning?", answer: "The Remote PIC must ensure the UAS is repaired and inspected before further flight." },
+    { question: "Can a Remote PIC operate a UAS over moving vehicles?", answer: "Yes, as long as the operation occurs over sparsely populated areas and meets Part 107 requirements." },
+    { question: "What is the requirement for UAS flight near other aircraft?", answer: "The Remote PIC must ensure the UAS does not endanger other aircraft by yielding the right of way." },
+    { question: "What is required for a Remote PIC to fly a small UA above 400 feet?", answer: "The UAS must be within 400 feet of a structure and no higher than the structure's uppermost limit." },
+    { question: "What actions should be taken in an emergency involving the small UAS?", answer: "The Remote PIC may deviate from any rule of Part 107 to the extent necessary to meet the emergency." },
+    { question: "What should a Remote PIC do when the small UAS is not performing as expected?", answer: "The Remote PIC should land the aircraft immediately and address the issue before further flight." },
+    { question: "What is the responsibility of a visual observer during UAS operations?", answer: "Ensure the UAS remains within visual line of sight and assist in avoiding other aircraft." },
+    { question: "What must a Remote PIC do if they suspect the UAS will not maintain controlled flight?", answer: "Take corrective actions and land the UAS as soon as it is safe to do so." },
+    { question: "What action should a Remote PIC take if they believe a person or property is at risk due to a UAS operation?", answer: "The Remote PIC must take immediate corrective actions to mitigate any risk." },
+	{ question: "What is required for a Remote PIC to operate a small UAS at night?", answer: "The UAS must have anti-collision lights visible for at least 3 statute miles, and the Remote PIC must complete night operations training." },
+    { question: "Can a Remote PIC operate a small UAS without direct visual line of sight?", answer: "No, the Remote PIC must maintain visual line of sight with the UAS, or use a visual observer to assist." },
+    { question: "What action should be taken if a remote pilot is unable to maintain visual line of sight?", answer: "The remote pilot must abort the operation and land the UAS immediately." },
+    { question: "What is the purpose of the preflight inspection?", answer: "To ensure the UAS is in a condition for safe operation before flight." },
+    { question: "What is the maximum weight of a small UAS that can be operated under Part 107?", answer: "55 pounds, including everything that is on board or attached to the aircraft." },
+    { question: "What is a Remote PIC required to do before operating over people?", answer: "Ensure the small UAS meets the specific operational and safety requirements for the chosen category of operations over people (Category 1, 2, or 3)." },
+    { question: "What must be done if a Remote PIC intends to operate in a restricted area?", answer: "The Remote PIC must obtain authorization from the controlling agency." },
+    { question: "When must a Remote PIC report a safety event?", answer: "A Remote PIC must report a safety event involving a UAS operation to the FAA within 10 calendar days." },
+    { question: "What is the requirement for Remote PICs operating near airports?", answer: "The Remote PIC must ensure the operation does not interfere with airport operations or traffic patterns, and obtain necessary ATC clearance if required." },
+    { question: "What actions should be taken if a UAS loses communication with the Remote PIC?", answer: "The Remote PIC should follow the pre-established lost communication procedures to safely recover or land the UAS." },
+    { question: "Can a Remote PIC operate a small UAS from a moving vehicle?", answer: "Yes, but only if the vehicle is operating over a sparsely populated area and the UAS is not carrying property for compensation or hire." },
+    { question: "What is required for operating a UAS within controlled airspace?", answer: "The Remote PIC must obtain prior authorization from ATC." },
+    { question: "How does a Remote PIC obtain a Certificate of Waiver?", answer: "A Remote PIC can apply for a Certificate of Waiver to deviate from specific Part 107 regulations, if the deviation can be conducted safely." },
+    { question: "What is the requirement for operating a UAS in Class G airspace?", answer: "No ATC authorization is required, but the Remote PIC must comply with all other Part 107 operational rules." },
+    { question: "What must a Remote PIC do before using a visual observer?", answer: "The Remote PIC must ensure the visual observer is properly briefed and able to maintain effective communication with the Remote PIC during the flight." },
+    { question: "What is the maximum allowable altitude for a small UAS operation in a national park?", answer: "A Remote PIC must comply with park regulations and may need permission for operations within national parks, including altitude restrictions." },
+    { question: "What should a Remote PIC do if a UAS experiences a system malfunction during flight?", answer: "The Remote PIC must ensure that corrective actions are taken and land the UAS as soon as possible." },
+    { question: "What is the impact of operating a UAS in poor weather conditions?", answer: "The Remote PIC should assess the weather conditions before flight and avoid operations in conditions that may pose safety risks, such as poor visibility, heavy winds, or thunderstorms." },
+    { question: "What is the purpose of conducting a risk assessment before a UAS operation?", answer: "The purpose is to identify potential hazards and mitigate them to ensure a safe flight." },
+    { question: "What is the requirement for a Remote PIC when operating in a Temporary Flight Restriction (TFR) area?", answer: "The Remote PIC must obtain authorization from the controlling agency before operating within a TFR area." },
+    { question: "What is required for a Remote PIC to fly a small UAS within 5 miles of an airport?", answer: "The Remote PIC must notify the airport operator and air traffic control before flying within 5 miles of an airport." },
+	{ question: "What are the two categories of airspace?", answer: "Regulatory and Nonregulatory." },
+	{ question: "What airspace types are included in the regulatory category?", answer: "Class A, B, C, D, E airspace, restricted and prohibited areas." },
+	{ question: "What airspace types are included in the nonregulatory category?", answer: "Military operations areas (MOA), warning areas, alert areas, controlled firing areas (CFA), and national security areas (NSA)." },
+	{ question: "What are the four types of airspace?", answer: "Controlled, uncontrolled, special use, and other airspace." },
+	{ question: "What factors dictate the categories and types of airspace?", answer: "The complexity or density of aircraft movements, the nature of the operations conducted, the level of safety required, and the national and public interest." },
+	{ question: "What is the hierarchy of overlapping airspace designations?", answer: "The more restrictive airspace designation applies in overlapping areas, with Class A being the most restrictive and Class G the least restrictive." },
+	{ question: "What is the basic VFR weather minimum for Class B airspace?", answer: "3 statute miles of flight visibility and clear of clouds." },
+	{ question: "What is the basic VFR weather minimum for Class C and Class D airspace?", answer: "3 statute miles of flight visibility, 500 feet below clouds, 1,000 feet above clouds, and 2,000 feet horizontal distance from clouds." },
+	{ question: "What are the basic VFR weather minimums for Class E airspace below 10,000 feet MSL?", answer: "3 statute miles of flight visibility, 500 feet below clouds, 1,000 feet above clouds, and 2,000 feet horizontal distance from clouds." },
+	{ question: "What is the basic VFR weather minimum for Class E airspace at or above 10,000 feet MSL?", answer: "5 statute miles of flight visibility, 1,000 feet below clouds, 1,000 feet above clouds, and 1 statute mile horizontal distance from clouds." },
+	{ question: "What is the basic VFR weather minimum for Class G airspace during the day?", answer: "1 statute mile of flight visibility and clear of clouds." },
+	{ question: "What is the basic VFR weather minimum for Class G airspace at night?", answer: "3 statute miles of flight visibility, 500 feet below clouds, 1,000 feet above clouds, and 2,000 feet horizontal distance from clouds." },
+	{ question: "What is the basic VFR weather minimum for helicopters in Class G airspace during the day?", answer: "½ statute mile of flight visibility and clear of clouds." },
+	{ question: "What is the basic VFR weather minimum for helicopters in Class G airspace at night?", answer: "1 statute mile of flight visibility and clear of clouds." },
+	{ question: "What is the VFR weather minimum for Class G airspace above 1,200 feet and below 10,000 feet MSL during the day?", answer: "1 statute mile of flight visibility, 500 feet below clouds, 1,000 feet above clouds, and 2,000 feet horizontal distance from clouds." },
+	{ question: "What is the VFR weather minimum for Class G airspace above 1,200 feet and below 10,000 feet MSL at night?", answer: "3 statute miles of flight visibility, 500 feet below clouds, 1,000 feet above clouds, and 2,000 feet horizontal distance from clouds." },
+	{ question: "What is the VFR weather minimum for Class G airspace above 10,000 feet MSL?", answer: "5 statute miles of flight visibility, 1,000 feet below clouds, 1,000 feet above clouds, and 1 statute mile horizontal distance from clouds." },
+	{ question: "What is the VFR cruising altitude for a magnetic course between 0° and 179°?", answer: "Odd thousands MSL, plus 500 feet (e.g., 3,500; 5,500; 7,500 feet)." },
+	{ question: "What is the VFR cruising altitude for a magnetic course between 180° and 359°?", answer: "Even thousands MSL, plus 500 feet (e.g., 4,500; 6,500; 8,500 feet)." },
+	{ question: "What VFR cruising altitude is required for a flight above 18,000 feet MSL but below FL 290?", answer: "Odd Flight Levels plus 500 feet (e.g., FL 195; FL 215; FL 235)." },
+	{ question: "What VFR cruising altitude is required for a flight above FL 290?", answer: "Even Flight Levels plus 500 feet (e.g., FL 185; FL 205; FL 225)." },
+	{ question: "What is the basic VFR weather minimum for Class G airspace for aircraft other than helicopters at 1,200 feet or less above the surface during the day?", answer: "1 statute mile of flight visibility and clear of clouds." },
+	{ question: "What is the VFR weather minimum for helicopters flying in Class G airspace below 1,200 feet during the day?", answer: "½ statute mile of flight visibility and clear of clouds." },
+	{ question: "What is the VFR weather minimum for Class G airspace for aircraft other than helicopters at night above 1,200 feet?", answer: "3 statute miles of flight visibility, 500 feet below clouds, 1,000 feet above clouds, and 2,000 feet horizontal distance from clouds." },
+	{ question: "Can a pilot fly VFR under a ceiling less than 1,000 feet within controlled airspace?", answer: "No, unless Special VFR weather minimums apply as provided in 14 CFR Section 91.157." },
+	{ question: "What is the visibility requirement for VFR flight in Class B airspace?", answer: "3 statute miles." },
+	{ question: "What are the distance requirements from clouds for VFR flight in Class C airspace?", answer: "500 feet below, 1,000 feet above, and 2,000 feet horizontal distance from clouds." },
+	{ question: "Which type of airspace has the least restrictive weather minimums for VFR operations?", answer: "Class G airspace." },
+	{ question: "In which airspace is VFR flight not permitted?", answer: "Class A airspace." },
+	{ question: "What type of airspace requires pilots to have clearance before entry?", answer: "Class B airspace." },
+	{ question: "What does the term 'VFR cruising altitude' refer to?", answer: "The altitude at which an aircraft should fly while cruising under VFR, depending on the magnetic course." },
+	{ question: "Which class of airspace is typically controlled, with requirements for a two-way radio communication?", answer: "Class C airspace." },
+	{ question: "What is the visibility requirement for VFR flight in Class E airspace at or above 10,000 feet MSL?", answer: "5 statute miles." },
+	{ question: "How far must a VFR pilot stay from clouds when flying in Class D airspace?", answer: "500 feet below, 1,000 feet above, and 2,000 feet horizontal distance from clouds." },
+	{ question: "What is the distance from clouds required for helicopters flying VFR in Class G airspace at night?", answer: "Clear of clouds." },
+	{ question: "What is the maximum altitude for VFR flight under basic weather minimums in Class G airspace?", answer: "10,000 feet MSL." },
+	{ question: "How should you announce a location when there are multiple airports with the same name within 500 miles?", answer: "Follow the location name with the state name (e.g., \"Columbus, Ohio\")"},
+    { question: "What phraseology do you use when reporting a special weather report?", answer: "(Location) SPECIAL WEATHER REPORT, (last two digits of the time) OBSERVATION"},
+    { question: "How do you announce wind direction and speed when the wind is calm?", answer: "WIND CALM"},
+    { question: "When reporting a wind with gusts, how should you phrase the wind information?", answer: "Use the phrase \"WIND (direction) AT (speed), GUSTS (gust speed)\"\nExample: WIND THREE SIX ZERO AT ONE TWO, GUSTS TWO ZERO"},
+    { question: "How do you announce visibility when the value is zero?", answer: "VISIBILITY ZERO"},
+    { question: "What is the proper way to say \"less than one quarter\" visibility?", answer: "VISIBILITY LESS THAN ONE QUARTER"},
+    { question: "When reporting Runway Visual Range (RVR), what format should be used?", answer: "RUNWAY (number), R-V-R (value)\nExample: RUNWAY ONE EIGHT, R-V-R TWO THOUSAND FOUR HUNDRED"},
+    { question: "How do you announce a temperature of 2 degrees with a dew point of -1?", answer: "TEMPERATURE TWO, DEW POINT MINUS ONE"},
+    { question: "What phraseology is used when the altimeter setting is 29.89?", answer: "ALTIMETER TWO NINER EIGHT NINER"},
+    { question: "When the altimeter setting is over 31.00, what must be advised to aircraft?", answer: "ALTIMETER GREATER THAN THREE ONE ZERO ZERO. HIGH PRESSURE ALTIMETER PROCEDURES ARE IN EFFECT."},
+    { question: "How should you announce a \"missing\" weather report component?", answer: "State the word \"MISSING\" for any item or component not reported"},
+    { question: "What does \"OCNL SHRA\" mean when reporting weather remarks?", answer: "Occasional Moderate Rain Showers"},
+    { question: "How do you report a ceiling that is variable between 500 and 1000 feet?", answer: "CEILING VARIABLE BETWEEN FIVE HUNDRED AND ONE THOUSAND"},
+    { question: "When reporting precipitation intensity from radar, what are the four categories?", answer: "- Light (less than 30 dBZ)\n- Moderate (30 to 40 dBZ)\n- Heavy (greater than 40 to 50 dBZ)\n- Extreme (greater than 50 dBZ)"},
+    { question: "How should wind speed be reported when it's less than 5 knots?", answer: "LIGHT AND VARIABLE"},
+    { question: "When reporting sky conditions, what does \"SCT020\" mean?", answer: "TWO THOUSAND SCATTERED"},
+    { question: "How do you announce a thunderstorm overhead moving east?", answer: "TS OHD MOV E (Thunderstorm Overhead, Moving East)"},
+    { question: "What phraseology is used when recommending against VFR flight?", answer: "V-F-R FLIGHT NOT RECOMMENDED (location) DUE TO (conditions)"},
+    { question: "When reporting peak winds, what information is included?", answer: "The wind direction, peak speed, and time of occurrence\nExample: PEAK WIND THREE THREE ZERO AT FOUR EIGHT OCCURRED AT TWO TWO PAST THE HOUR"},
+    { question: "How should you announce multiple obscuring phenomena?", answer: "List each phenomenon\nExample: FOG AND SMOKE OBSCURING ONE TO TWO-EIGHTS OF THE SKY" }
+];
+
+
+        let randomizedCards = [];
+        let currentIndex = 0;
+        let correctAnswers = 0;
+        let totalAnswers = 0;
+
+        // Function to shuffle the flashcards
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Initialize the flashcards with randomization
+        function initialize() {
+            randomizedCards = shuffle([...flashcards]);
+            currentIndex = 0;
+            correctAnswers = 0;
+            totalAnswers = 0;
+            updateScore();
+            nextCard();
+        }
+
+        function showAnswer() {
+            document.getElementById('answer').style.display = "block";
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % randomizedCards.length;
+            document.getElementById('question').textContent = randomizedCards[currentIndex].question;
+            document.getElementById('answer').textContent = randomizedCards[currentIndex].answer;
+            document.getElementById('answer').style.display = "none";
+            document.getElementById('userAnswer').value = ""; // Clear the textbox
+        }
+
+        function markCorrect() {
+            correctAnswers++;
+            totalAnswers++;
+            updateScore();
+            nextCard();
+        }
+
+        function markIncorrect() {
+            totalAnswers++;
+            updateScore();
+            nextCard();
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = `Score: ${correctAnswers}/${totalAnswers}`;
+        }
+
+        // Randomize the cards on page load
+        initialize();
+    </script>
+</body>
+</html>
